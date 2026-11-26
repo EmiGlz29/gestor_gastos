@@ -3,6 +3,8 @@
 namespace Database\Seeders;
 
 use App\Models\User;
+use App\Models\Categoria;
+use App\Models\Gasto;
 use Illuminate\Database\Console\Seeds\WithoutModelEvents;
 use Illuminate\Database\Seeder;
 
@@ -15,11 +17,21 @@ class DatabaseSeeder extends Seeder
      */
     public function run(): void
     {
-        // User::factory(10)->create();
+        $this->call(CategoriaSeeder::class);
+        $categorias = Categoria::all();
 
-        User::factory()->create([
-            'name' => 'Test User',
-            'email' => 'test@example.com',
+        $usuario = User::factory()->create([
+            'name' => 'admin',
+            'email' => 'prueba@admin.com',
+            'password' => bcrypt('1234'),
         ]);
+
+        Gasto::factory(15)
+            ->for($usuario)
+            ->create()
+            ->each(function (Gasto $gasto) use ($categorias) {
+                $idsAleatorios = $categorias->random(rand(1, 3))->pluck('id');
+                $gasto->categorias()->attach($idsAleatorios);
+            });
     }
 }
