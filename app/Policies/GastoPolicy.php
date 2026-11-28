@@ -9,51 +9,51 @@ use Illuminate\Auth\Access\Response;
 class GastoPolicy
 {
     /**
-     * Determine whether the user can view any models.
+     * Cualquier usuario autenticado si puede ver cualquiera de sus gastos.
      */
     public function viewAny(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Determine whether the user can view the model.
+     * Solo el dueño puede ver los detalles.
      */
     public function view(User $user, Gasto $gasto): bool
     {
-        return false;
+        return $user->id === $gasto->user_id;
     }
 
     /**
-     * Determine whether the user can create models.
+     * Cualquier usuario autenticado puede crear un gasto nuevo.
      */
     public function create(User $user): bool
     {
-        return false;
+        return true;
     }
 
     /**
-     * Determine whether the user can update the model.
+     * Solo el dueño puede actualizar el gasto.
      */
     public function update(User $user, Gasto $gasto): bool
     {
-        return false;
+        return $user->id === $gasto->user_id;
     }
 
     /**
-     * Determine whether the user can delete the model.
+     * Solo el dueño puede eliminar el gasto.
      */
     public function delete(User $user, Gasto $gasto): bool
     {
-        return false;
+        return $user->id === $gasto->user_id;
     }
 
     /**
-     * Determine whether the user can restore the model.
+     * Solo el dueño puede restaurar el gasto.
      */
     public function restore(User $user, Gasto $gasto): bool
     {
-        return false;
+        return $user->id === $gasto->user_id;
     }
 
     /**
@@ -61,6 +61,6 @@ class GastoPolicy
      */
     public function forceDelete(User $user, Gasto $gasto): bool
     {
-        return false;
+        return $user->id === $gasto->user_id;
     }
 }
